@@ -1,0 +1,16 @@
+pandas
+pyarrow
+fastparquet
+sqlalchemy
+psycopg2-binary
+requests
+pandera
+great-expectations
+apache-airflow
+dbt-postgres
+langchain
+langgraph
+chromadb
+ollama
+jupyter
+python-dotenv
