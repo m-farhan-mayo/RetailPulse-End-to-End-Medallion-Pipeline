@@ -1,0 +1,15 @@
+{
+	"name": "adf-retailpulse-dev-farhan",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "771c3828-1490-4b8f-b640-40b51e731d48",
+		"tenantId": "fbf5cc83-111b-4a7a-8236-2614922d0745"
+	}
+}

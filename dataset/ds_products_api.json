@@ -1,0 +1,19 @@
+{
+	"name": "ds_products_api",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_fakestore_api",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/products"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

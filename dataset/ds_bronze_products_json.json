@@ -1,0 +1,24 @@
+{
+	"name": "ds_bronze_products_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_adls_bronze",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "products_@{formatDateTime(utcNow(),'yyyy-MM-dd')}.json",
+					"type": "Expression"
+				},
+				"folderPath": "retailpulse/products",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,21 @@
+{
+	"name": "ls_sqlserver_retailpulse",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "DESKTOP-8KRAMD3",
+			"database": "RetailPulseDB",
+			"encrypt": "optional",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "farhanmayo",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIyNzM4NjAxMC0zMDNkLTQyZDgtYjgyOC1jMTU2NzNjNWNjZWQiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "adf-retailpulse-dev-rt",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

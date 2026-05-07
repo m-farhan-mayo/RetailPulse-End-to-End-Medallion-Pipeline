@@ -1,0 +1,47 @@
+{
+	"name": "ds_sql_sales_transactions",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver_retailpulse",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [
+			{
+				"name": "order_id",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "store_id",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "product_id",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "qty",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "price",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "date",
+				"type": "date"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "sales_transactions"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

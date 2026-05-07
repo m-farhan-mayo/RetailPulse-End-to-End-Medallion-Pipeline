@@ -1,0 +1,19 @@
+{
+	"name": "ds_currency_api",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_currency_api",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "/v6/latest/USD"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

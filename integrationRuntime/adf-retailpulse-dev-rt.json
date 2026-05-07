@@ -1,0 +1,6 @@
+{
+	"name": "adf-retailpulse-dev-rt",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
