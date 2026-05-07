@@ -14,3 +14,9 @@ chromadb
 ollama
 jupyter
 python-dotenv
+pyyaml
+adlfs
+azure-storage-file-datalake
+python-dotenv
+pyyaml
+geopandas

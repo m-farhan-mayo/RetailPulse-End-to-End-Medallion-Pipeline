@@ -1,0 +1,8 @@
+langchain 
+langgraph 
+chromadb 
+ollama 
+pandas 
+sqlalchemy 
+sentence-transformers 
+langchain-community

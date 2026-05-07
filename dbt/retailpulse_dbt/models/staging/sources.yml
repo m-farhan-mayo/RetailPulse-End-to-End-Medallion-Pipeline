@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: clean
+    schema: public
+
+    tables:
+      - name: sales_clean

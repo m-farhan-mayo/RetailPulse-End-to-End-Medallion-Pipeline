@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailPulse Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8f9fa;
+            --text-muted: #a0aec0;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --success: #10b981;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            padding: 2rem 0;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .kpi-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .main-grid {
+            grid-template-columns: 2fr 1fr;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .kpi-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .kpi-title {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .card-header {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-header::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-gradient);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .tables-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+            font-style: italic;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>RetailPulse</h1>
+            <p class="subtitle">Real-time Data Intelligence Dashboard</p>
+        </header>
+
+        <!-- KPI Summary -->
+        <div class="grid kpi-grid" id="kpi-container">
+            <div class="card kpi-card">
+                <div class="kpi-title">Total Revenue</div>
+                <div class="kpi-value loading">Loading...</div>
+            </div>
+            <div class="card kpi-card">
+                <div class="kpi-title">Total Orders</div>
+                <div class="kpi-value loading">Loading...</div>
+            </div>
+            <div class="card kpi-card">
+                <div class="kpi-title">Avg Order Value</div>
+                <div class="kpi-value loading">Loading...</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="grid main-grid">
+            <div class="card">
+                <div class="card-header">Monthly Sales Trend</div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">Top 5 Products</div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-tbody">
+                            <tr><td colspan="2" class="loading">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" style="margin-top: 2rem;">
+            <div class="card-header">Store Performance</div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Store ID</th>
+                            <th>Total Revenue</th>
+                            <th>Total Orders</th>
+                            <th>Avg Order Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stores-tbody">
+                        <tr><td colspan="4" class="loading">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Formatter for currency
+        const formatter = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            maximumFractionDigits: 0
+        });
+
+        // Fetch KPI Data
+        async function loadKPIs() {
+            try {
+                const res = await fetch('/revenue/summary');
+                const data = await res.json();
+                
+                if (data && data.length > 0) {
+                    const kpi = data[0]; // Assuming it returns a single summary row
+                    const container = document.getElementById('kpi-container');
+                    
+                    container.innerHTML = `
+                        <div class="card kpi-card">
+                            <div class="kpi-title">Total Revenue</div>
+                            <div class="kpi-value">${formatter.format(kpi.total_revenue || 0)}</div>
+                        </div>
+                        <div class="card kpi-card">
+                            <div class="kpi-title">Total Orders</div>
+                            <div class="kpi-value">${(kpi.total_orders || 0).toLocaleString()}</div>
+                        </div>
+                        <div class="card kpi-card">
+                            <div class="kpi-title">Avg Order Value</div>
+                            <div class="kpi-value">${formatter.format(kpi.avg_order_value || 0)}</div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                console.error("Error loading KPIs", err);
+                document.querySelectorAll('.kpi-value').forEach(el => el.innerHTML = "Error");
+            }
+        }
+
+        // Fetch Monthly Sales & Initialize Chart
+        async function loadMonthlySales() {
+            try {
+                const res = await fetch('/revenue/monthly-sales');
+                const data = await res.json();
+                
+                // Process data for chart
+                const aggregated = {};
+                data.forEach(row => {
+                    const label = `${row.year}-${String(row.month).padStart(2, '0')}`;
+                    if (!aggregated[label]) aggregated[label] = 0;
+                    aggregated[label] += parseFloat(row.total_revenue || 0);
+                });
+                
+                const labels = Object.keys(aggregated).sort();
+                const values = labels.map(l => aggregated[l]);
+
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                
+                // Create gradient for the line
+                let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, 'rgba(59, 130, 246, 0.5)'); // primary
+                gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Total Revenue',
+                            data: values,
+                            borderColor: '#3b82f6',
+                            backgroundColor: gradient,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#8b5cf6',
+                            pointBorderColor: '#fff',
+                            pointHoverBackgroundColor: '#fff',
+                            pointHoverBorderColor: '#8b5cf6',
+                            pointRadius: 4,
+                            pointHoverRadius: 6,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(11, 15, 25, 0.9)',
+                                titleColor: '#fff',
+                                bodyColor: '#a0aec0',
+                                borderColor: 'rgba(255,255,255,0.1)',
+                                borderWidth: 1,
+                                padding: 10,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: {
+                                    color: '#a0aec0',
+                                    callback: function(value) {
+                                        return '$' + (value / 1000) + 'k';
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                ticks: { color: '#a0aec0' }
+                            }
+                        }
+                    }
+                });
+                
+            } catch (err) {
+                console.error("Error loading monthly sales", err);
+            }
+        }
+
+        // Fetch Top Products
+        async function loadTopProducts() {
+            try {
+                const res = await fetch('/products/top-products');
+                const data = await res.json();
+                
+                const tbody = document.getElementById('products-tbody');
+                tbody.innerHTML = '';
+                
+                // Show top 5
+                data.slice(0, 5).forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.product_name || 'Unknown Product'}</td>
+                        <td style="font-weight: 600; color: var(--success);">${formatter.format(row.total_revenue || 0)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error loading top products", err);
+                document.getElementById('products-tbody').innerHTML = '<tr><td colspan="2">Error loading data.</td></tr>';
+            }
+        }
+        
+        // Fetch Store Performance
+        async function loadStorePerformance() {
+            try {
+                const res = await fetch('/stores/performance');
+                const data = await res.json();
+                
+                const tbody = document.getElementById('stores-tbody');
+                tbody.innerHTML = '';
+                
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>Store #${row.store_id || 'N/A'}</td>
+                        <td style="font-weight: 600; color: var(--success);">${formatter.format(row.total_revenue || 0)}</td>
+                        <td>${(row.total_orders || 0).toLocaleString()}</td>
+                        <td>${formatter.format(row.avg_order_value || 0)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error("Error loading store performance", err);
+                document.getElementById('stores-tbody').innerHTML = '<tr><td colspan="4">Error loading data.</td></tr>';
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadKPIs();
+            loadMonthlySales();
+            loadTopProducts();
+            loadStorePerformance();
+        });
+    </script>
+</body>
+</html>

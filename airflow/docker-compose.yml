@@ -1,0 +1,41 @@
+services:
+
+  airflow-webserver:
+    image: apache/airflow:2.9.1
+
+    container_name: retailpulse_airflow_webserver
+
+    restart: always
+
+    depends_on:
+      - airflow-scheduler
+
+    environment:
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+
+    command: webserver
+
+  airflow-scheduler:
+    image: apache/airflow:2.9.1
+
+    container_name: retailpulse_airflow_scheduler
+
+    restart: always
+
+    environment:
+      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+
+    command: scheduler

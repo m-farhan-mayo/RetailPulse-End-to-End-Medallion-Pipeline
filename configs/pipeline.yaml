@@ -1,0 +1,14 @@
+project: retailpulse
+
+storage:
+  account_name_env: AZURE_STORAGE_ACCOUNT
+  account_key_env: AZURE_STORAGE_KEY
+
+paths:
+  bronze_sales: "bronze/retailpulse/sales/"
+  silver_sales: "silver/retailpulse/sales/"
+  gold_sales: "gold/retailpulse/sales/"
+
+rules:
+  qty_min: 1
+  price_min: 0
